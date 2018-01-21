@@ -1,8 +1,8 @@
 <template name="task">
     <li class="{{#if checked}}checked{{/if}}">
         <button class="delete">&times;</button>
-        <input class="input" type="text" value="{{name}}"/>
-        <input class="input" type="text" value="{{price}}" />
-        <input class="input" type="text" value="{{description}}" />
+        <input class="name" type="text" value="{{name}}"/>
+        <input class="price" type="text" value="{{price}}" />
+        <input class="description" type="text" value="{{description}}" />
     </li>
 </template>

@@ -1,7 +1,5 @@
 import { Template } from 'meteor/templating';
-
 import { Tasks } from '../api/tasks.js';
-
 import './task.js'
 import './body.html';
 Template.body.helpers({
@@ -12,7 +10,18 @@ Template.body.helpers({
         return Tasks.find({}, {sort: {createdAt: -1}});
     },
 });
-
+Template.body.onRendered(function(){
+    $('.new-data').validate({
+        rules: {
+            name: {
+                required: true
+            },
+            price:{
+                number:true
+            }
+        }
+    });
+});
 Template.body.events({
     'submit .new-task'(event) {
         // Prevent default browser form submit
@@ -20,13 +29,12 @@ Template.body.events({
 
         // Get value from form element
         const target = event.target;
-        const text = target.text.value;
+        const name = target.text.value;
 
        Meteor.call('query',{
-           text,
-           createdAt: new Date(), // current time
+           name
        },function(err,result){
-
+           console.log(result);
        });
 
         // Clear form
