@@ -34,7 +34,7 @@ Template.body.events({
        Meteor.call('query',{
            name
        },function(err,result){
-           console.log(result);
+           console.log(result.hits.hits);
        });
 
         // Clear form
@@ -53,7 +53,7 @@ Template.body.events({
             name,
             price,
             description,
-            createdAt: new Date(), // current time
+            createdAt: new Date() // current time
         };
 
         // Insert a task into the collection

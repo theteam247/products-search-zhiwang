@@ -6,6 +6,7 @@ Meteor.startup(() => {
     // code to run on server at startup
 
 });
+
 Meteor.methods({
     'insert': function (obj) {
         let id = obj._id;
@@ -29,7 +30,7 @@ Meteor.methods({
             type: 'table',
             id,
             body: {
-                doc:obj
+                doc: obj
             }
         }, function (error, response) {
             console.log(error);
@@ -48,36 +49,48 @@ Meteor.methods({
     },
     'query': function (obj) {
         console.log('-=================');
-        let temp = null;
-        var promise = new Promise(function (resolve, reject) {
+
+        var asyncFunc = function (callback) {
             Client.search({
                 index: 'db',
                 type: 'table',
                 body: {
-                    query: {
-                        match: {
-                            name: obj.name
+                    //query: {
+                    //    "bool": {
+                    //        //"must":     { "match": { "title": "quick" }},
+                    //        //"must_not": { "match": { "title": "lazy"  }},
+                    //        "should": [
+                    //            {
+                    //                "regexp": {
+                    //                    "name": '*'+obj.name+'*'
+                    //                }
+                    //            }
+                    //        ]
+                    //    }
+                    //},
+                    "query": {
+                        "multi_match": {
+                            "query":       obj.name,
+                            "type":        "most_fields",
+                            "fields":      [ "name",'description']
                         }
-                    }
+                    },
+                    sort: [
+                        {"_score": {"order": "desc"}}
+                    ]
                 }
             }, function (error, response) {
                 if (error) {
-                    reject(error);
+                    callback(error)
                 } else {
-                    resolve(response.hits.hits);
+                    callback(null, response);
                 }
             });
+        };
 
-        });
-        promise.then(function (value) {
-            console.log('**************');
-            console.log(value);
-            temp = value;
-            // success
-        }, function (value) {
-            // failure
-        });
-        return temp;
+        var syncFunc = Meteor._wrapAsync(asyncFunc);
+
+        return syncFunc();
 
     }
 });
