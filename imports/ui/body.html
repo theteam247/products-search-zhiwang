@@ -1,0 +1,22 @@
+<body>
+<div class="container">
+    <header>
+        <h1>products</h1>
+        <form class="new-task">
+            <input type="text" name="text" placeholder="click here. to search something..." />
+        </form>
+        <form class="new-data">
+            <input type="text" name="name" placeholder="name" />
+            <input type="text" name="price" placeholder="price" />
+            <input type="text" name="description" placeholder="description" />
+            <input type="submit" value="Submit"/>
+        </form>
+    </header>
+
+    <ul>
+        {{#each tasks}}
+        {{> task}}
+        {{/each}}
+    </ul>
+</div>
+</body>
