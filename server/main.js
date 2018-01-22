@@ -48,35 +48,39 @@ Meteor.methods({
         });
     },
     'query': function (obj) {
-        console.log('-=================');
 
         var asyncFunc = function (callback) {
             Client.search({
                 index: 'db',
                 type: 'table',
                 body: {
-                    //query: {
-                    //    "bool": {
-                    //        //"must":     { "match": { "title": "quick" }},
-                    //        //"must_not": { "match": { "title": "lazy"  }},
-                    //        "should": [
-                    //            {
-                    //                "regexp": {
-                    //                    "name": '*'+obj.name+'*'
-                    //                }
-                    //            }
-                    //        ]
-                    //    }
-                    //},
                     "query": {
-                        "multi_match": {
-                            "query":       obj.name,
-                            "type":        "most_fields",
-                            "fields":      [ "name",'description']
+                        "bool": {
+                            "should": [
+                                {
+                                    "match": {
+                                        "name": {
+                                            "query": obj.name,
+                                            "boost": 2
+                                        }
+                                    }
+                                },
+                                {
+                                    "match": {
+                                        "description": {
+                                            "query": obj.name,
+                                            "boost": 1
+                                        }
+                                    }
+                                }
+
+                            ]
                         }
                     },
-                    sort: [
+                    "sort": [
                         {"_score": {"order": "desc"}}
+                        //{ "name":   { "order": "desc" }}
+
                     ]
                 }
             }, function (error, response) {

@@ -1,6 +1,6 @@
 import '../imports/ui/body.js';
 
-import './main.html';
+//import './main.html';
 
 //Template.hello.onCreated(function helloOnCreated() {
 //  // counter starts at 0
@@ -15,7 +15,8 @@ import './main.html';
 //
 //Template.hello.events({
 //  'click button'(event, instance) {
-//    // increment the counter when button is clicked
+//      console.log(instance);
+//      // increment the counter when button is clicked
 //    instance.counter.set(instance.counter.get() + 1);
 //  },
 //});

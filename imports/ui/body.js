@@ -2,13 +2,19 @@ import { Template } from 'meteor/templating';
 import { Tasks } from '../api/tasks.js';
 import './task.js'
 import './body.html';
+let flag = false;
+Template.body.onCreated(function helloOnCreated() {
+  // counter starts at 0
+  this.searchData = new ReactiveVar([]);
+});
 Template.body.helpers({
-
     tasks() {
-
-        // Show newest tasks at the top
-        return Tasks.find({}, {sort: {createdAt: -1}});
+        let temp = Tasks.find({}, {sort: {createdAt: -1}});
+        return temp.fetch();
     },
+    searchData(){
+        return Template.instance().searchData.get();
+    }
 });
 Template.body.onRendered(function(){
     $('.new-data').validate({
@@ -23,10 +29,9 @@ Template.body.onRendered(function(){
     });
 });
 Template.body.events({
-    'submit .new-task'(event) {
+    'submit .new-task'(event,instance) {
         // Prevent default browser form submit
         event.preventDefault();
-
         // Get value from form element
         const target = event.target;
         const name = target.text.value;
@@ -34,7 +39,13 @@ Template.body.events({
        Meteor.call('query',{
            name
        },function(err,result){
+           let temp = [];
            console.log(result.hits.hits);
+           for (var value of result.hits.hits) {
+               temp.push(value._source);
+           }
+           console.log(temp);
+           instance.searchData.set(temp);
        });
 
         // Clear form

@@ -21,13 +21,12 @@ Template.task.events({
         const _id = this._id;
         event.preventDefault();
         var name = event.target.value;
-        console.log(name);
         Tasks.update(_id, {
             $set: { name }
         },function(err,result){
             if(!err){
                 Meteor.call('update',{_id,name},function(back){
-                    alert(back);
+                    alert('修改成功');
                 })
             }
         });
@@ -42,7 +41,7 @@ Template.task.events({
         },function(err,result){
             if(!err){
                 Meteor.call('update',{_id,price},function(back){
-                    alert(back);
+                    alert('修改成功');
                 })
             }
         });
@@ -57,7 +56,7 @@ Template.task.events({
         },function(err,result){
             if(!err){
                 Meteor.call('update',{_id,description},function(back){
-                    alert(back);
+                    alert('修改成功');
                 })
             }
         });
@@ -67,7 +66,7 @@ Template.task.events({
         Tasks.remove(this._id,function(err,result){
             if(!err){
                 Meteor.call('delete',{_id},function(back){
-                    alert(back);
+                    alert('删除成功');
                 })
             }
         });
